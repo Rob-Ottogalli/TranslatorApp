@@ -1,11 +1,10 @@
 package datamanagement;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Reader {
 
-    public Map<Integer, String> textLines = new TreeMap<>();
+    public Map<Integer, TranslationSegment> textLines = new TreeMap<>();
 
     String filename;
 
@@ -42,8 +41,11 @@ public class Reader {
         try {
             while((line = txtReader.getTxt().readLine().toString()) != null){
 //                System.out.println(line);
+                TranslationSegment newSegment = new TranslationSegment();
+                newSegment.setSegmentID(counter);
+                newSegment.setSourceText(line);
 
-                this.textLines.put(counter, line);
+                this.textLines.put(counter, newSegment);
                 counter++;
 
             }

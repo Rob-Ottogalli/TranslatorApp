@@ -1,10 +1,14 @@
 package com.example.translatorapp;
 
+import datamanagement.TranslationSegment;
+import editor.TableEditor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -15,6 +19,8 @@ import java.io.IOException;
 
 public class TranslatorApplication extends Application {
     private Reader textReader = new Reader();
+    private TableEditor table = new TableEditor();
+    private TableView tableEditor = this.table.getEditorView();
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -33,36 +39,58 @@ public class TranslatorApplication extends Application {
 
         Button importButton = new Button("Import file");
         GridPane.setConstraints(importButton, 1, 0);
-        importButton.setOnAction(e -> textReader.process(importText.getText()));
+        importButton.setOnAction(e -> this.importFile(importText));
 
+        this.displayTable(layout,0, 2);
 
-        Button displaySourceTextText = new Button("Display source text");
+        Button displaySourceTextText = new Button("Parse file");
         GridPane.setConstraints(displaySourceTextText, 1, 1);
-        displaySourceTextText.setOnAction(e -> this.displaySourceText(2, 0));
+        displaySourceTextText.setOnAction(e -> this.displayTable(layout,0, 2));
+//        displaySourceTextText.setOnAction(e -> this.displaySourceText(layout,0, 2));
+
 //
 //        for (int i=0; i < textReader.textLines.size(); i++) {
 //            System.out.println(textReader.textLines.get(i));
 //        }
 //        System.out.println("This line executed.");
 
-        Text text1 = new Text();
-        text1.setText("Joe Momma");
-        GridPane.setConstraints(text1, 4, 4);
+//        Text text1 = new Text();
+//        text1.setText("Joe Momma");
+//        GridPane.setConstraints(text1, 0, 4);
 
-        layout.getChildren().addAll(importButton, importText, displaySourceTextText, text1);
+        layout.getChildren().addAll(importButton, importText, displaySourceTextText);
 
-        Scene scene = new Scene(layout, 500, 300);
+        Scene scene = new Scene(layout, 900, 300);
         stage.setTitle("Translator App");
         stage.setScene(scene);
         stage.show();
     }
 
-    private void displaySourceText(int x, int y) {
+    private void importFile(TextField importText) {
+        textReader.process(importText.getText());
+        System.out.println("Imported Successfully");
+    }
+
+    private void displayTable(GridPane layout, int x, int y) {
+
+
+        GridPane.setConstraints(this.tableEditor, x, y);
+        layout.getChildren().addAll(this.tableEditor);
+    }
+
+    private void displaySourceText(GridPane layout, int x, int y) {
+        Label sourceLabel = new Label();
+        sourceLabel.setText("Source Text");
+        GridPane.setConstraints(sourceLabel, x, y);
+        layout.getChildren().add(sourceLabel);
+
         for (int i=0; i < textReader.textLines.size(); i++) {
+
             Text sourceLine = new Text();
-            sourceLine.setText(textReader.textLines.get(i));
-            GridPane.setConstraints(sourceLine, x, y);
-            x++;
+            sourceLine.setText(i + textReader.textLines.get(i).getSourceText());
+            GridPane.setConstraints(sourceLine, x, y+1);
+            layout.getChildren().addAll(sourceLine);
+            y++;
         }
     }
 
