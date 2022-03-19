@@ -1,5 +1,4 @@
-package editor;
-import datamanagement.TranslationSegment;
+package com.translatorapp;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -19,7 +18,7 @@ public class TableEditor {
     }
 
     private void initialize() {
-        TableColumn<TranslationSegment, String> segmentIDColumn = new TableColumn<>("ID");
+        TableColumn<TranslationSegment, Integer> segmentIDColumn = new TableColumn<>("ID");
         segmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("segmentID"));
 
         TableColumn<TranslationSegment, String> sourceSegment = new TableColumn<>("Source");
@@ -38,7 +37,7 @@ public class TableEditor {
     }
 
     public void addSegment(TranslationSegment segment) {
-        this.editorView.getItems().add(segment);
+        this.editorView.getItems().add(new TranslationSegment(segment.getSegmentID(), segment.getSourceText()));
     }
 
 }

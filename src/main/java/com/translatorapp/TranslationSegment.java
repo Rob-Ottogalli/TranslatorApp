@@ -1,16 +1,24 @@
-package datamanagement;
+package com.translatorapp;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class TranslationSegment {
 
-    private int segmentID;
-    private String sourceText;
-    private String targetText;
+    private int segmentID = 0;
+    private final StringProperty sourceText = new SimpleStringProperty();
+    private String targetText = null;
 
     public TranslationSegment() {
 
     }
 
     public TranslationSegment(String source) {
+        this.setSourceText(source);
+    }
+
+    public TranslationSegment(int id, String source) {
+        this.setSegmentID(id);
         this.setSourceText(source);
     }
 
@@ -22,12 +30,16 @@ public class TranslationSegment {
         this.segmentID = segmentID;
     }
 
-    public String getSourceText() {
+    public final StringProperty sourceTextProperty() {
         return sourceText;
     }
 
+    public String getSourceText() {
+        return sourceText.get();
+    }
+
     public void setSourceText(String sourceText) {
-        this.sourceText = sourceText;
+        this.sourceText.set(sourceText);
     }
 
     public String getTargetText() {

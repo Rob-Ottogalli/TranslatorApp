@@ -1,4 +1,4 @@
-module com.example.translatorapp {
+module com {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -6,6 +6,8 @@ module com.example.translatorapp {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens com.example.translatorapp to javafx.fxml;
-    exports com.example.translatorapp;
+    opens com.translatorapp to javafx.fxml;
+    exports com.translatorapp;
+    exports com;
+    opens com to javafx.fxml;
 }

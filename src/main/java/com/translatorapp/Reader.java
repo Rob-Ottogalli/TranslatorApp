@@ -1,4 +1,4 @@
-package datamanagement;
+package com.translatorapp;
 
 import java.util.*;
 

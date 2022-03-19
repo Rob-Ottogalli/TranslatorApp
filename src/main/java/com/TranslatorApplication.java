@@ -1,7 +1,9 @@
-package com.example.translatorapp;
+package com;
 
-import datamanagement.TranslationSegment;
-import editor.TableEditor;
+import com.translatorapp.Reader;
+import com.translatorapp.TranslationSegment;
+//import com.translatorapp.TranslationSegment;
+import com.translatorapp.TableEditor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -14,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import datamanagement.Reader;
 import java.io.IOException;
 
 public class TranslatorApplication extends Application {
@@ -42,10 +43,11 @@ public class TranslatorApplication extends Application {
         importButton.setOnAction(e -> this.importFile(importText));
 
         this.displayTable(layout,0, 2);
+//        this.tableEditor.getItems().add(new TranslationSegment(1, "This is a string."));
 
         Button displaySourceTextText = new Button("Parse file");
         GridPane.setConstraints(displaySourceTextText, 1, 1);
-        displaySourceTextText.setOnAction(e -> this.displayTable(layout,0, 2));
+        displaySourceTextText.setOnAction(e -> this.parseFile());
 //        displaySourceTextText.setOnAction(e -> this.displaySourceText(layout,0, 2));
 
 //
@@ -72,10 +74,15 @@ public class TranslatorApplication extends Application {
     }
 
     private void displayTable(GridPane layout, int x, int y) {
-
-
         GridPane.setConstraints(this.tableEditor, x, y);
         layout.getChildren().addAll(this.tableEditor);
+    }
+
+    private void parseFile() {
+        for (int i=0; i < textReader.textLines.size(); i++) {
+            TranslationSegment segment = textReader.textLines.get(i);
+            this.table.addSegment(segment);
+        }
     }
 
     private void displaySourceText(GridPane layout, int x, int y) {

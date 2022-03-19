@@ -1,4 +1,4 @@
-package com.example.translatorapp;
+package com.translatorapp;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
