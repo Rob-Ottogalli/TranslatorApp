@@ -90,6 +90,10 @@ public class TranslatorApplication extends Application {
             TranslationSegment segment = parsedLines.get(i);
             this.table.addSegment(segment);
         }
+
+        parsedLines.entrySet().forEach(entry -> {
+            System.out.println(entry.getValue());
+        });
     }
 
     private void displaySourceText(GridPane layout, int x, int y) {

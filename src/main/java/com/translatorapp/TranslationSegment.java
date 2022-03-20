@@ -49,4 +49,8 @@ public class TranslationSegment {
     public void setTargetText(String targetText) {
         this.targetText = targetText;
     }
+
+    public String toString() {
+        return this.getSegmentID() + " " + this.getSourceText();
+    }
 }

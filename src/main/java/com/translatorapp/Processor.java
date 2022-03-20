@@ -32,7 +32,12 @@ public class Processor {
                 // Get each segment
                 sentence = sentence.trim();
 
-                if (sentence != "") {
+                if ((sentence.equals("\"")) || (sentence.equals("\'"))) {
+                    TranslationSegment previousSegment = this.parsedLines.get(counter-1);
+                    previousSegment.setSourceText(previousSegment.getSourceText() + sentence);
+                    this.parsedLines.put(counter-1, previousSegment);
+                }
+                else if (sentence != "") {
                     TranslationSegment newSegment = new TranslationSegment();
                     newSegment.setSegmentID(counter);
                     newSegment.setSourceText(sentence);
