@@ -1,9 +1,9 @@
 package com;
 
+import com.translatorapp.Processor;
 import com.translatorapp.Reader;
-import com.translatorapp.TranslationSegment;
-//import com.translatorapp.TranslationSegment;
 import com.translatorapp.TableEditor;
+import com.translatorapp.TranslationSegment;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -17,9 +17,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class TranslatorApplication extends Application {
     private Reader textReader = new Reader();
+    private Processor textProcessor;
     private TableEditor table = new TableEditor();
     private TableView tableEditor = this.table.getEditorView();
 
@@ -73,14 +75,19 @@ public class TranslatorApplication extends Application {
         System.out.println("Imported Successfully");
     }
 
+
     private void displayTable(GridPane layout, int x, int y) {
         GridPane.setConstraints(this.tableEditor, x, y);
         layout.getChildren().addAll(this.tableEditor);
     }
 
     private void parseFile() {
-        for (int i=0; i < textReader.textLines.size(); i++) {
-            TranslationSegment segment = textReader.textLines.get(i);
+        textProcessor = new Processor(textReader);
+        textProcessor.parseReader();
+
+        Map<Integer, TranslationSegment> parsedLines = textProcessor.getParsedLines();
+        for (int i=0; i < parsedLines.size(); i++) {
+            TranslationSegment segment = parsedLines.get(i);
             this.table.addSegment(segment);
         }
     }
@@ -91,10 +98,13 @@ public class TranslatorApplication extends Application {
         GridPane.setConstraints(sourceLabel, x, y);
         layout.getChildren().add(sourceLabel);
 
-        for (int i=0; i < textReader.textLines.size(); i++) {
+        Map<Integer, TranslationSegment> parsedLines = textProcessor.getParsedLines();
+
+
+        for (int i=0; i < parsedLines.size(); i++) {
 
             Text sourceLine = new Text();
-            sourceLine.setText(i + textReader.textLines.get(i).getSourceText());
+            sourceLine.setText(i + parsedLines.get(i).getSourceText());
             GridPane.setConstraints(sourceLine, x, y+1);
             layout.getChildren().addAll(sourceLine);
             y++;

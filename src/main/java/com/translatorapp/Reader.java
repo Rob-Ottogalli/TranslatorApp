@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Reader {
 
-    public Map<Integer, TranslationSegment> textLines = new TreeMap<>();
+    public Map<Integer, String> textLines = new TreeMap<>();
 
     String filename;
 
@@ -40,23 +40,11 @@ public class Reader {
 
         try {
             while((line = txtReader.getTxt().readLine().toString()) != null){
-//                System.out.println(line);
-                TranslationSegment newSegment = new TranslationSegment();
-                newSegment.setSegmentID(counter);
-                newSegment.setSourceText(line);
-
-                this.textLines.put(counter, newSegment);
+                this.textLines.put(counter, line);
                 counter++;
-
             }
-        } catch (Exception e) {
-            //System.out.println("\n***processTxt Exception caught!!***\n");  // ***REMOVE***
-            //e.printStackTrace();
-        }
+        } catch (Exception e) { }
 
-//        for (int i=0; i < this.textLines.size(); i++) {
-//            System.out.println(this.textLines.get(i));
-//        }
     }
 
     public void process(String filename) {
