@@ -8,6 +8,7 @@ public class TranslationSegment {
     private int segmentID = 0;
     private final StringProperty sourceText = new SimpleStringProperty();
     private String targetText = null;
+    private String filename = "";
 
     public TranslationSegment() {
 
@@ -50,7 +51,15 @@ public class TranslationSegment {
         this.targetText = targetText;
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     public String toString() {
-        return this.getSegmentID() + " " + this.getSourceText();
+        return this.getSegmentID() + " " + this.getSourceText() + " " + this.getTargetText();
     }
 }

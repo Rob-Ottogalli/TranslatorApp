@@ -8,7 +8,7 @@ public class Reader {
 
     String filename;
 
-    /** Processor of files for type .csv, .txt
+    /** PreProcessor of files for type .csv, .txt
      *
      * Take in a filename and filetype (String of extension type)
      * and then selects the correct process to extract the relevant data
@@ -34,6 +34,7 @@ public class Reader {
      */
     private void processTxt(String filename){
 
+        this.filename = filename;
         TXTFileReader txtReader = new TXTFileReader(filename);
         String line;
         int counter = 0;
@@ -57,6 +58,10 @@ public class Reader {
         } catch (Exception e) {
 
         }
+    }
+
+    public String getFilename() {
+        return this.filename;
     }
 
 }

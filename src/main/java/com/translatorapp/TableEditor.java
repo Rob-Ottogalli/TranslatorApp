@@ -1,11 +1,13 @@
 package com.translatorapp;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TableColumn.CellEditEvent;
 
 
 public class TableEditor {
@@ -32,10 +34,25 @@ public class TableEditor {
         targetColumn.setCellValueFactory(new PropertyValueFactory<>("targetText"));
         targetColumn.setCellFactory(TextFieldTableCell.<TranslationSegment>forTableColumn());
         targetColumn.setPrefWidth(250);
+        targetColumn.setOnEditCommit(
+            new EventHandler<TableColumn.CellEditEvent<TranslationSegment, String>>() {
+                @Override
+                public void handle(CellEditEvent<TranslationSegment, String> targetSegmentText) {
+                    ((TranslationSegment) targetSegmentText.getTableView().getItems().get(
+                            targetSegmentText.getTablePosition().getRow())
+                            ).setTargetText(targetSegmentText.getNewValue());
+                }
+            }
+        );
+
+
+        TableColumn<TranslationSegment, String> filenameColumn = new TableColumn<>("File Name");
+        filenameColumn.setCellValueFactory(new PropertyValueFactory<>("filename"));
+        filenameColumn.setPrefWidth(100);
 
         // Attach columns to editor and set editor dimensions
-        this.editorView.getColumns().addAll(segmentIDColumn, sourceColumn, targetColumn);
-        editorView.setMinWidth(550);
+        this.editorView.getColumns().addAll(segmentIDColumn, sourceColumn, targetColumn, filenameColumn);
+        editorView.setMinWidth(650);
         editorView.setPlaceholder(new Label("No segments to display"));
 
         // Set minimum height of each row
@@ -55,7 +72,8 @@ public class TableEditor {
     }
 
     public void addSegment(TranslationSegment segment) {
-        this.editorView.getItems().add(new TranslationSegment(segment.getSegmentID(), segment.getSourceText()));
+        this.editorView.getItems().add(segment);
     }
+
 
 }

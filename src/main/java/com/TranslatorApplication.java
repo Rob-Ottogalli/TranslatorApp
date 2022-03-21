@@ -1,6 +1,6 @@
 package com;
 
-import com.translatorapp.Processor;
+import com.translatorapp.PreProcessor;
 import com.translatorapp.Reader;
 import com.translatorapp.TableEditor;
 import com.translatorapp.TranslationSegment;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class TranslatorApplication extends Application {
     private Reader textReader = new Reader();
-    private Processor textProcessor;
+    private PreProcessor textPreProcessor;
     private TableEditor table = new TableEditor();
     private TableView tableEditor = this.table.getEditorView();
 
@@ -44,7 +44,7 @@ public class TranslatorApplication extends Application {
         GridPane.setConstraints(importButton, 1, 0);
         importButton.setOnAction(e -> this.importFile(importText));
 
-        this.displayTable(layout,0, 2);
+        this.displayTable(layout,0, 3);
 //        this.tableEditor.getItems().add(new TranslationSegment(1, "This is a string."));
 
         Button displaySourceTextText = new Button("Parse file");
@@ -62,16 +62,21 @@ public class TranslatorApplication extends Application {
 //        text1.setText("Joe Momma");
 //        GridPane.setConstraints(text1, 0, 4);
 
-        layout.getChildren().addAll(importButton, importText, displaySourceTextText);
+        Button printTextToConsole = new Button("Print text");
+        GridPane.setConstraints(printTextToConsole, 1, 2);
+        printTextToConsole.setOnAction(e -> {this.printTable();});
 
-        Scene scene = new Scene(layout, 900, 300);
+        layout.getChildren().addAll(importButton, importText, displaySourceTextText, printTextToConsole);
+
+        Scene scene = new Scene(layout, 900, 500);
         stage.setTitle("Translator App");
         stage.setScene(scene);
         stage.show();
     }
 
     private void importFile(TextField importText) {
-        textReader.process(importText.getText());
+        this.textReader.process(importText.getText());
+        this.textPreProcessor = new PreProcessor(this.textReader);
         System.out.println("Imported Successfully");
     }
 
@@ -82,10 +87,10 @@ public class TranslatorApplication extends Application {
     }
 
     private void parseFile() {
-        textProcessor = new Processor(textReader);
-        textProcessor.parseReader();
 
-        Map<Integer, TranslationSegment> parsedLines = textProcessor.getParsedLines();
+        this.textPreProcessor.parseReader();
+
+        Map<Integer, TranslationSegment> parsedLines = this.textPreProcessor.getParsedLines();
         for (int i=0; i < parsedLines.size(); i++) {
             TranslationSegment segment = parsedLines.get(i);
             this.table.addSegment(segment);
@@ -102,7 +107,7 @@ public class TranslatorApplication extends Application {
         GridPane.setConstraints(sourceLabel, x, y);
         layout.getChildren().add(sourceLabel);
 
-        Map<Integer, TranslationSegment> parsedLines = textProcessor.getParsedLines();
+        Map<Integer, TranslationSegment> parsedLines = textPreProcessor.getParsedLines();
 
 
         for (int i=0; i < parsedLines.size(); i++) {
@@ -112,6 +117,13 @@ public class TranslatorApplication extends Application {
             GridPane.setConstraints(sourceLine, x, y+1);
             layout.getChildren().addAll(sourceLine);
             y++;
+        }
+    }
+
+    private void printTable() {
+        if (this.textPreProcessor != null) {
+            this.textPreProcessor.getParsedLines().entrySet().forEach(entry ->
+                    System.out.println(entry.getValue().toString()));
         }
     }
 
