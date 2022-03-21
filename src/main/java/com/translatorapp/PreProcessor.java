@@ -14,7 +14,7 @@ public class PreProcessor {
 
     public void parseReader(){
 
-        Map<Integer, String> textLines = this.reader.textLines;
+        Map<Integer, String> textLines = this.reader.getTextLines();
 
         String line;
         int counter = 0;
@@ -56,5 +56,9 @@ public class PreProcessor {
 
     public Map<Integer, TranslationSegment> getParsedLines() {
         return parsedLines;
+    }
+
+    public Reader getReader() {
+        return reader;
     }
 }

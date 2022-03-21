@@ -1,9 +1,6 @@
 package com;
 
-import com.translatorapp.PreProcessor;
-import com.translatorapp.Reader;
-import com.translatorapp.TableEditor;
-import com.translatorapp.TranslationSegment;
+import com.translatorapp.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,6 +19,7 @@ import java.util.Map;
 public class TranslatorApplication extends Application {
     private Reader textReader = new Reader();
     private PreProcessor textPreProcessor;
+    private PostProcessor textPostProcessor;
     private TableEditor table = new TableEditor();
     private TableView tableEditor = this.table.getEditorView();
 
@@ -66,7 +64,13 @@ public class TranslatorApplication extends Application {
         GridPane.setConstraints(printTextToConsole, 1, 2);
         printTextToConsole.setOnAction(e -> {this.printTable();});
 
-        layout.getChildren().addAll(importButton, importText, displaySourceTextText, printTextToConsole);
+        Button exportTarget = new Button("Export target");
+        GridPane.setConstraints(exportTarget, 2, 2);
+        exportTarget.setOnAction(e -> this.exportTarget());
+
+        layout.getChildren().addAll(
+                importButton, importText,
+                displaySourceTextText, printTextToConsole, exportTarget);
 
         Scene scene = new Scene(layout, 900, 500);
         stage.setTitle("Translator App");
@@ -125,6 +129,17 @@ public class TranslatorApplication extends Application {
             this.textPreProcessor.getParsedLines().entrySet().forEach(entry ->
                     System.out.println(entry.getValue().toString()));
         }
+    }
+
+    private void exportTarget() {
+        this.textPostProcessor = new PostProcessor(this.textPreProcessor);
+
+        try {
+            this.textPostProcessor.exportTarget();
+        } catch (Exception e) {
+            System.out.println("The line did not execute");
+        }
+
     }
 
     public static void main(String[] args) {

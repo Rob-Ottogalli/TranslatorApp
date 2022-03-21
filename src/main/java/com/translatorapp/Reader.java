@@ -4,9 +4,10 @@ import java.util.*;
 
 public class Reader {
 
-    public Map<Integer, String> textLines = new TreeMap<>();
+    private Map<Integer, String> textLines = new TreeMap<>();
 
-    String filename;
+    private String filename;
+    private String filetype;
 
     /** PreProcessor of files for type .csv, .txt
      *
@@ -16,6 +17,7 @@ public class Reader {
      */
     public Reader(String filename){
         this.filename = filename;
+        this.identifyFileType();
     }
 
     public Reader() {
@@ -35,6 +37,7 @@ public class Reader {
     private void processTxt(String filename){
 
         this.filename = filename;
+        this.identifyFileType();
         TXTFileReader txtReader = new TXTFileReader(filename);
         String line;
         int counter = 0;
@@ -49,6 +52,7 @@ public class Reader {
     }
 
     public void process(String filename) {
+
         String fileExtension = filename.substring(filename.length()-4, filename.length());
         System.out.println(fileExtension);
         try {
@@ -60,8 +64,23 @@ public class Reader {
         }
     }
 
+    public void identifyFileType() {
+        String[] filenameSplit = this.filename.split("\\.");
+        String fileExtension = filenameSplit[filenameSplit.length-1];
+
+        this.filetype = fileExtension;
+        System.out.println("Reader file type: " + this.filetype);
+    }
+
     public String getFilename() {
         return this.filename;
     }
 
+    public String getFiletype() {
+        return this.filetype;
+    }
+
+    public Map<Integer, String> getTextLines() {
+        return textLines;
+    }
 }
