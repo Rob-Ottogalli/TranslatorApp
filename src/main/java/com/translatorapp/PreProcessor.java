@@ -27,7 +27,7 @@ public class PreProcessor {
             // Note:  If a line ends in a delimiter followed by ' or ",
             // the ' or " will be a new segment.
 
-            String[] splitLine = line.split("(?<=(?<!(Mr?s?)|(Esq)|( [A-Z]))[/.!?]\\\"?)");
+            String[] splitLine = line.split("(?<=(?<!(Mr?s?)|(Esq)|( [A-Z]))[/.!?])");
 
             // Store each line as a new Translation segment in the Map
             for (String sentence : splitLine) {
@@ -37,8 +37,11 @@ public class PreProcessor {
                 // Handle edge cases
                 if ((sentence.equals("\"")) || (sentence.equals("\'"))) {
                     TranslationSegment previousSegment = this.parsedLines.get(counter-1);
-                    previousSegment.setSourceText(previousSegment.getSourceText() + sentence);
+                    previousSegment.setSourceText(previousSegment.getSourceText() + "\"");
                     this.parsedLines.put(counter-1, previousSegment);
+                }
+                else if ((sentence.equals("\n")) || (sentence.equals("\s")) || (sentence.equals("\r"))) {
+                    continue;
                 }
                 else if (sentence != "") {
                     TranslationSegment newSegment = new TranslationSegment();
@@ -58,7 +61,19 @@ public class PreProcessor {
         return parsedLines;
     }
 
+    public void printParsedLines() {
+        this.parsedLines.entrySet().forEach(entry ->
+                System.out.println(entry.getValue().toString()));
+    }
+
     public Reader getReader() {
         return reader;
+    }
+
+    public void pseudoTranslate() {
+        for (int i=0; i<this.parsedLines.size(); i++) {
+            String targetTranslation = "pseudo";
+            this.parsedLines.get(i).setTargetText(targetTranslation);
+        }
     }
 }

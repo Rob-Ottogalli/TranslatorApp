@@ -64,13 +64,17 @@ public class TranslatorApplication extends Application {
         GridPane.setConstraints(printTextToConsole, 1, 2);
         printTextToConsole.setOnAction(e -> {this.printTable();});
 
+        Button pseudoTranslate = new Button("Pseudotranlate");
+        GridPane.setConstraints(pseudoTranslate, 2, 1);
+        pseudoTranslate.setOnAction(e -> {this.textPreProcessor.pseudoTranslate();});
+
         Button exportTarget = new Button("Export target");
         GridPane.setConstraints(exportTarget, 2, 2);
         exportTarget.setOnAction(e -> this.exportTarget());
 
         layout.getChildren().addAll(
                 importButton, importText,
-                displaySourceTextText, printTextToConsole, exportTarget);
+                displaySourceTextText, printTextToConsole, exportTarget, pseudoTranslate);
 
         Scene scene = new Scene(layout, 900, 500);
         stage.setTitle("Translator App");

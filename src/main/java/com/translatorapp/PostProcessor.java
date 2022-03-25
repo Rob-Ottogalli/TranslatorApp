@@ -14,6 +14,8 @@ public class PostProcessor {
     private Map<Integer, TranslationSegment> parsedLines = new TreeMap<>();
     private String filetype;
     private String sourceFilename;
+    public String sourceFileContents;
+    public String targetFileContents;
 
     private PrintWriter out;
     private String outputFilename;
@@ -82,7 +84,8 @@ public class PostProcessor {
                 buffer.append(sc.nextLine()+System.lineSeparator());
             }
             String fileContents = buffer.toString();
-            System.out.println("Contents of the file: "+fileContents);
+            this.sourceFileContents = fileContents;
+            System.out.println("Contents of the file: " + fileContents);
 
             //closing the Scanner object
             sc.close();
@@ -92,14 +95,17 @@ public class PostProcessor {
             for (int i=0; i < this.parsedLines.size(); i++) {
                 String sourceText = this.parsedLines.get(i).getSourceText();
                 String targetText = this.parsedLines.get(i).getTargetText();
-                fileContents = fileContents.replaceAll(sourceText, targetText);
+                System.out.println(i + " " + sourceText);
+                System.out.println(i + " " + targetText);
+                fileContents = fileContents.replace(sourceText, targetText);
             }
 
+            this.targetFileContents = fileContents;
 
             //instantiating the FileWriter class
             FileWriter writer = new FileWriter(this.outputFilename);
             System.out.println("");
-            System.out.println("new data: "+fileContents);
+            System.out.println("new data: " + fileContents);
             writer.append(fileContents);
             writer.flush();
         }
